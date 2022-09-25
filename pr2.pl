@@ -12,7 +12,7 @@ lessTwoLegs(lion, 0).
 lessTwoLegs(tiger, 0).
 lessTwoLegs(bear, 0).
 lessTwoLegs(spider, 0).
-lessTwoLegs(snake, 0).
+lessTwoLegs(snake, 1).
 lessTwoLegs(horse, 0).
 
 % 2
@@ -306,13 +306,44 @@ question14(X14):- write("14 Is this animal featured in Darwin s research?"),nl,
 				write("0. NO"),nl,
 				read(X14).
 
-pr:- question1(X1),question2(X2),question3(X3),question4(X4),
-    question5(X5),question6(X6),question7(X7),question8(X8),
-    question9(X9),question10(X10),question11(X11),question12(X12),
-    question13(X13),question14(X14),
-    lessTwoLegs(X,X1),hasLongestNeck(X,X2),isBigAndFearRate(X,X3),
-    isColdBloded(X,X4),moreThen4Leg(X,X5),equal4Leg(X,X6),isCatPride(X,X7),
-    isHousePet(X,X8),isPestAnimal(X,X9),hasMane(X,X10),isArctic(X,X11),isBattleAnimal(X,X12),
-    hasBeak(X,X13),isDarvin(X,X14),
-    write(X).
-	
+
+pr2:- question6(X6),
+        ((X6==0,question1(X1),
+            ((X1==0,equal4Leg(X,X6),lessTwoLegs(X,X1),nl,write(X),nl,abort());true),
+            (X1==1,question4(X4),
+                (equal4Leg(X,X6),lessTwoLegs(X,X1),isColdBloded(X,X4),nl,write(X),nl,abort())
+            )
+        );true),
+        (X6==1,question7(X7),
+            ((X7==1,question8(X8),
+                ((X8==1,equal4Leg(X,X6),isCatPride(X,X7),isHousePet(X,X8),nl,write(X),nl,abort());true),
+                (X8==0,question10(X10),
+                    (equal4Leg(X,X6),isCatPride(X,X7),isHousePet(X,X8),hasMane(X,X10),nl,write(X),nl,abort())
+                )
+            );true),
+            (X7==0, question4(X4),
+                ((X4==1, equal4Leg(X,X6), isCatPride(X,X7),isColdBloded(X,X4),nl,write(X),nl,abort());true),
+                (X4==0, question2(X2),
+                    ((X2==1,equal4Leg(X,X6), isCatPride(X,X7),isColdBloded(X,X4), hasLongestNeck(X,X2),nl,write(X),nl,abort());true),
+                    (X2==0, question3(X3),
+                        ((X3==1, equal4Leg(X,X6),isCatPride(X,X7),isBigAndFearRate(X,X3),nl,write(X),nl,abort());true),
+                        (X3==0, question8(X8),
+                            ((X8==1, question9(X9),
+                                (equal4Leg(X,X6),isCatPride(X,X7),isBigAndFearRate(X,X3),isHousePet(X,X8),isPestAnimal(X,X9),nl,write(X),nl,abort())
+                            );true),
+                            (X8==0, question11(X11),
+                                ((X11==1, equal4Leg(X,X6),isCatPride(X,X7),isBigAndFearRate(X,X3),isPestAnimal(X,X9),isHousePet(X,X8),isArctic(X,X11),nl,write(X),nl,abort());true),
+                                (X11==0, question12(X12),
+                                    ((X12==1,equal4Leg(X,X6),isCatPride(X,X7),isBigAndFearRate(X,X3),isHousePet(X,X8),isPestAnimal(X,X9),isArctic(X,X11),isBattleAnimal(X,X12),nl,write(X),nl,abort());true),
+                                    (X12==0, question13(X13),
+                                        ((X13==1, equal4Leg(X,X6),isCatPride(X,X7),isBigAndFearRate(X,X3),isHousePet(X,X8),isPestAnimal(X,X9),isArctic(X,X11),isColdBloded(X,X4),hasBeak(X,X13),nl,write(X),nl,abort());true),
+                                        (equal4Leg(X,X6),isCatPride(X,X7),isBigAndFearRate(X,X3),isHousePet(X,X8),isPestAnimal(X,X9),isArctic(X,X11),hasBeak(X,X13),isColdBloded(X,X4), nl,write(X),nl,abort())
+                                    )
+                                )
+                            )
+                        )
+                    )                
+                )
+            )
+        ).
+            
