@@ -63,10 +63,10 @@ maxDivisor(X):- maxDivisor(X,0,X).
 maxDivisor(X, 0, X):- !.
 maxDivisor(X, Y, Ost):- max(X,Y,Max), min(X,Y,Min), Var is Max mod Min, maxDivisor(Min, Var, Ost).
 
-% :- discontiguous checkSimple/3.
-% checkSimple(X, X, Y):- (Y>2), !; .
-% checkSimple(X):- checkSimple(X, 1, 0).
-%checkSimple(X, CurDiv, QuanityDiv):- Ost is X mod CurDiv, CurDiv1 is CurDiv + 1, ((Ost==0, QuanityDiv1 is QuanityDiv + 1, checkSimple(X,CurDiv1,QuanityDiv1));(checkSimple(X,CurDiv1,QuanityDiv))).
+:- discontiguous checkSimple/3.
+checkSimple(X, X, Y):- (Y>2, write("not simple")); (write("simple"), !).
+checkSimple(X):- checkSimple(X, 1, 0).
+checkSimple(X, CurDiv, QuanityDiv):- Ost is X mod CurDiv, CurDiv1 is CurDiv + 1, ((Ost==0, QuanityDiv1 is QuanityDiv + 1, checkSimple(X,CurDiv1,QuanityDiv1));(checkSimple(X,CurDiv1,QuanityDiv))).
 
 isDivisible(Number, Divisor):-
   Number mod Divisor = 0, !.
@@ -219,5 +219,24 @@ checkAll(X):-
       X1 is X mod 3, X1=0,
       	write("answer 3"), !
     ).
-    
+
+checkAll2(X):- checkAll2(X, 2, 0, _, 0).
+checkAll2(X, X, _, MD, MQ):- nl, write("answer = "), write(MD), nl, write(MQ).
+checkAll2(X, CD, CQ, MD, MQ):- (
+                                    X1 is X mod CD, X1=0,
+                                    maxNumberNOD(X, CD, CQ1),
+                                        (
+                                            CQ1 > MQ,  
+                                            MQ1 is CQ1, 
+                                            MD1 is CD, 
+                                            CD1 is CD + 1,
+                                            checkAll2(X, CD1, CQ1, MD1, MQ1)
+                                        );
+                                        (
+                                            CD1 is CD + 1,
+                                            checkAll2(X, CD1, CQ, MD, MQ)
+                                        )
+                                ); 
+                                (CD1 is CD + 1, checkAll2(X, CD1, MD, MQ)).
+
     
